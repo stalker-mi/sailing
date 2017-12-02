@@ -1,6 +1,25 @@
  
  
 #map_canvas{ 
-    height: 500px;
+    height: calc(100% - 100px);
 }
 
+.st_table{
+    width: 100%;
+    height: 100px;
+    background-color: darkgray;
+    color: white;
+    border-spacing: 0px;
+}
+
+.st_table .title{
+	background-color: gray;
+}
+
+.st_table td{
+	padding: 0px 5px;
+}
+.st_table .content td{
+	padding: 2px 5px;
+}
+ 
