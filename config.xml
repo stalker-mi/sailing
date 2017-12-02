@@ -3,7 +3,7 @@
     id          = "com.gelisimyazilim.sailing"
     versionCode = "10"
     version     = "1.0.0" >
-    <name>Edu</name>
+    <name>Sailing</name>
 
   <description>
       Desc
