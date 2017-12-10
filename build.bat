@@ -8,11 +8,11 @@ git commit -a -m "Auto Commit"
 
 git push
 
-/*
-token = ToQ9uvUPmLpH6M_zzXZD
-app = 2912599
-?auth_token=ASTRINGTOKEN
-*/
+
+:: token = ToQ9uvUPmLpH6M_zzXZD
+:: app = 2912599
+:: ?auth_token=ASTRINGTOKEN
+
 
 curl -X POST -d '' https://build.phonegap.com/api/v1/apps/2912599/build/android?auth_token=ToQ9uvUPmLpH6M_zzXZD
 
