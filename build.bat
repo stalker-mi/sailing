@@ -6,4 +6,4 @@ git commit -a -m "Auto Commit"
 
 git push
 
-set /P var="finish"
+@set /P var="finish"
