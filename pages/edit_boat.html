@@ -2,7 +2,7 @@
   <div class="navbar">
     <div class="navbar-inner sliding">
       <div class="left">
-        <a href="#" class="link insert_boat">
+        <a href="#" class="link update_boat">
           <i class="icon icon-back"></i>
           <span class="ios-only">Back</span>
         </a>
@@ -13,12 +13,13 @@
   <div class="page-content">
     <div class="block">
       <p>Identify your boat</p>
-      <form class="list form-store-data" id="demo-form">
+      <form class="list ">
 		  <ul>
 			<li class="item-content item-input">
 			  <div class="item-inner">
 				<div class="item-input-wrap">
-				  <input name="boat_name" type="text" placeholder="Boat Name" class="boat_name" autocomplete="off" >
+				  <input type="hidden" name="boat_id" class="boat_id" value="{{this.$route.params.boat_id}}">
+				  <input name="boat_name" type="text" placeholder="Boat Name" class="boat_name" value="{{js 'return boats[this.$route.params.boat_id].name'}}">
 				  <span class="input-clear-button"></span>
 				</div>
 			  </div>
@@ -26,7 +27,7 @@
 		    <li class="item-content item-input">
 			  <div class="item-inner">
 				<div class="item-input-wrap">
-				  <input name="sail_number" type="number" placeholder="Sail Number" class="sail_number">
+				  <input name="sail_number" type="number" placeholder="Sail Number" class="sail_number" value="{{js 'return boats[this.$route.params.boat_id].number'}}">
 				  <span class="input-clear-button"></span>
 				</div>
 			  </div>
@@ -34,14 +35,14 @@
 			<li class="item-content item-input">
 			  <div class="item-inner">
 				<div class="item-input-wrap">
-				  <input name="boat_length" type="number" placeholder="Boat Length" class="boat_length">
+				  <input name="boat_length" type="number" placeholder="Boat Length" class="boat_length" value="{{js 'return boats[this.$route.params.boat_id].len'}}">
 				  <span class="input-clear-button"></span>
 				</div>
 			  </div>
 			</li>
 		  </ul>
 		</form>
-		<a href="/boats/" class="button color-red button-outline">Cancel</a>
+		<a href="#" class="button delete_boat color-red button-outline">Delete</a>
     </div>
   </div>
 </div>

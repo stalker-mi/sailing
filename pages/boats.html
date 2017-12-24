@@ -16,7 +16,7 @@
 	  <div class="list links-list">
 		  <ul>
 			{{#each boats}}
-				<li><a href="#">{{this.name}}</a></li>
+				<li><a href="#" data-id="{{this.id}}" class="select_boat">{{this.name}}<div class="button button-fill color-blue edit_boat_button">Edit</div></a></li>
 			{{/each}}
 		  </ul>
 	  </div>
@@ -26,6 +26,10 @@
 </div>
 </template>
 <script>
+	$('.boat_id').val('').trigger('change');
+	$('.boat_name').val('').trigger('change');
+	$('.sail_number').val('').trigger('change');
+	$('.boat_length').val('').trigger('change');
 	
 	return {
 		data: function () {
@@ -33,7 +37,13 @@
 		  return {
 			name: 'Jimmy',
 			age: 25,
-			boats: boats,
+			boats: function(){
+				var new_boats = [];
+				for(i in boats){
+					new_boats.push(boats[i]);
+				}
+				return new_boats;
+			},
 		  }
 		},
 		

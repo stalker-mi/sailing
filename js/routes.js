@@ -16,6 +16,17 @@ var routes = [
     url: './pages/add_boat.html',
     name: 'add_boat',
   },
+  {
+    path: '/boats/edit_boat/:boat_id',
+    templateUrl: './pages/edit_boat.html',
+    name: 'edit_boat',
+  },
+  {
+    path: '/data_fields/:field_id',
+    templateUrl: './pages/data_fields.html',
+    name: 'data_fields',
+  },
+  
   // Right Panel pages
 
   // Components

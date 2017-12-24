@@ -7,13 +7,13 @@
 .st_table{
     width: 100%;
     height: 100px;
-    background-color: darkgray;
+    background-color: #525252;
     color: white;
     border-spacing: 0px;
 }
 
 .st_table .title{
-	background-color: gray;
+	background-color: #2f2f2f;
 }
 
 .st_table td{
@@ -23,3 +23,10 @@
 	padding: 2px 5px;
 }
  
+ .md .links-list a.selected{
+	background-color:#f1f1f1;
+}
+
+.hide{
+	display: none;
+}

@@ -1,0 +1,25 @@
+<div class="page">
+  <div class="navbar">
+    <div class="navbar-inner sliding">
+      <div class="left">
+        <a href="#" class="link back">
+          <i class="icon icon-back"></i>
+          <span class="ios-only">Back</span>
+        </a>
+      </div>
+      <div class="title">Data Fields</div>
+    </div>
+  </div>
+  <div class="page-content">
+	<div class="hide">{{js 'field_id = this.$route.params.field_id'}}</div>
+    <div class="block">
+		<div class="list links-list">
+		  <ul>
+			  {{#each $root.data_fields}}
+				<li><a href="#" class="{{js 'return (field_id==this.field) ? \"selected\" : null '}}">{{this.name}}</a></li>
+			  {{/each}}
+		  </ul>
+		</div>
+    </div>
+  </div>
+</div>
