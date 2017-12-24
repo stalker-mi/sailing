@@ -33,12 +33,12 @@ function initMap(){
 	//var map = new GoogleMap();
 	//map.initialize();
 	var mapOptions = {
-		zoom: 9,
+		zoom: 15,
 		center: new google.maps.LatLng(41.0669484, 29.0122383),
 		mapTypeId: google.maps.MapTypeId.ROADMAP,
 		disableDefaultUI: true
 		}
-		var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	app.data.map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
 }
 
 var db = window.openDatabase("Dummy_DB", "1.0", "Just a Dummy DB", 200000); //will create database Dummy_DB or open it
@@ -216,21 +216,21 @@ $(document).on('click', '.select_data_field', function (e) {
 
 
 function onGeoSuccess(position) {
-	var mapOptions = {
-		zoom: 15,
-		center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-		mapTypeId: google.maps.MapTypeId.ROADMAP,
-		disableDefaultUI: true
+	if(app.data.last_marker){
+		app.data.last_marker.setMap(null);
 	}
-	var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
 	
 	var marker = new google.maps.Marker({
 		position: {lat: position.coords.latitude, lng: position.coords.longitude},
-		map: map,
 		title:"Hello World!",
 		icon: "./icons/yacht48.png"
 	});
+	app.data.map.setCenter({lat: position.coords.latitude, lng: position.coords.longitude});
 	
+	marker.setMap(app.data.map);
+	
+	app.data.last_marker = marker;
 	console.log(position);
 }
 function onGeoError(error) {
