@@ -212,5 +212,29 @@ $(document).on('click', '.select_data_field', function (e) {
 	else{
 		app.router.navigate('/');
 	}
-	
 });
+
+
+function onGeoSuccess(position) {
+	var mapOptions = {
+		zoom: 15,
+		center: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		disableDefaultUI: true
+	}
+	var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+	
+	var marker = new google.maps.Marker({
+		position: {lat: position.coords.latitude, lng: position.coords.longitude},
+		map: map,
+		title:"Hello World!",
+		icon: "./icons/yacht48.png"
+	});
+	
+	console.log(position);
+}
+function onGeoError(error) {
+	console.log('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+}
+
+var watchID = navigator.geolocation.watchPosition(onGeoSuccess, onGeoError, { timeout: 10000 });
