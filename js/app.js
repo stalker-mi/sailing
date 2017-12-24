@@ -7,20 +7,8 @@ var app = new Framework7({
   theme: 'auto',
   data: function () {
     return {
-      data_fields: [
-			{value: 'cog', name: 'COG'},
-			{value: 'drift', name: 'Drift'},
-			{value: 'gps_accuracy', name: 'GPS Accuracy'},
-			{value: 'heading', name: 'Heading'},
-			{value: 'heel', name: 'Heel', field: 1},
-			{value: 'distance', name: 'Distance', field: 2},
-			{value: 'pitch', name: 'Pitch'},
-			{value: 'speed_avg', name: 'Speed Avg', field: 3},
-			{value: 'sog', name: 'SOG'},
-			{value: 'speed_max', name: 'Speed Max'},
-			{value: 'elapse_time', name: 'Elapse Time', field: 4},
-			{value: 'time_of_day', name: 'Time of Day'},
-		]
+      data_fields: [],
+      data_fields_active: []
     };
   },
   methods: {
@@ -55,18 +43,39 @@ function initMap(){
 
 var db = window.openDatabase("Dummy_DB", "1.0", "Just a Dummy DB", 200000); //will create database Dummy_DB or open it
 db.transaction(populateDB, errorCB);
-
 function populateDB(tx) {
 	tx.executeSql('CREATE TABLE IF NOT EXISTS boats (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, number TEXT, len INTEGER)');
-
+	tx.executeSql('CREATE TABLE IF NOT EXISTS data_fields (id INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT NOT NULL, name TEXT, lang_id INTEGER)');
+	query('SELECT * FROM data_fields',[],function(tx,results){
+		if (results.rows.length == 0) {
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("cog", "COG", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("drift", "Drift", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("gps_accuracy", "GPS Accuracy", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("heading", "Heading", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("heel", "Heel", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("distance", "Distance", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("pitch", "Pitch", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("speed_avg", "Speed Avg", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("sog", "SOG", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("speed_max", "Speed Max", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("elapse_time", "Elapse Time", "1")');
+			tx.executeSql('INSERT INTO data_fields(value,name,lang_id) VALUES ("time_of_day", "Time of Day", "1")');
+		}
+	});
+	tx.executeSql('CREATE TABLE IF NOT EXISTS data_fields_selected (id INTEGER PRIMARY KEY, field INTEGER)');
+	query('SELECT * FROM data_fields_selected',[],function(tx,results){
+		if (results.rows.length == 0) {
+			tx.executeSql('INSERT INTO data_fields_selected(id,field) VALUES (1, 5)');
+			tx.executeSql('INSERT INTO data_fields_selected(id,field) VALUES (2, 6)');
+			tx.executeSql('INSERT INTO data_fields_selected(id,field) VALUES (3, 8)');
+			tx.executeSql('INSERT INTO data_fields_selected(id,field) VALUES (4, 11)');
+		}
+	});
 }
- 
-    //function will be called when an error occurred
-    function errorCB(err) {
-        console.log("Error processing SQL: "+err.code);
-    }
+function errorCB(err) {
+	console.log("Error processing SQL: "+err.code);
+}
 
-	
 function query(sql, args, callback){
 	db.transaction(
 		function(tx){
@@ -74,7 +83,9 @@ function query(sql, args, callback){
 		},
 	errorCB);
 }
+	
 
+// boats 
 $(document).on('click', '.edit_boat_button', function (e) {
 	app.router.navigate('/boats/edit_boat/'+$(this).closest('a').data('id'));
 });
@@ -149,7 +160,57 @@ function get_boats(callback){
 	});
 }
 
+get_data_fields(function(){
+	get_data_fields_selected(function(){
+		$('.st_table .title td[data-id="1"]').text(app.data.data_fields_active[0].name);
+		$('.st_table .title td[data-id="2"]').text(app.data.data_fields_active[1].name);
+		$('.st_table .title td[data-id="3"]').text(app.data.data_fields_active[2].name);
+		$('.st_table .title td[data-id="4"]').text(app.data.data_fields_active[3].name);
+	});
+});
+function get_data_fields(callback){
+	app.data.data_fields = [];
+	query('SELECT * FROM data_fields where lang_id = 1',[],function(tx,results){
+		for (var i=0; i<results.rows.length; i++){
+			app.data.data_fields.push(results.rows.item(i));
+		}
+		if(callback){
+			callback();
+		}
+	});
+}
+
+function get_data_fields_selected(callback){
+	app.data.data_fields_active = [];
+	query('SELECT df.*, dfs.id as sel_id FROM data_fields df \
+	INNER JOIN data_fields_selected dfs ON dfs.field = df.id \
+	where df.lang_id = 1',[],function(tx,results){
+		for (var i=0; i<results.rows.length; i++){
+			app.data.data_fields_active[results.rows.item(i).sel_id-1] = results.rows.item(i);
+		}
+		if(callback){
+			callback();
+		}
+	});
+}
+
+
 $(document).on('click', '.st_table .title td', function (e) {
 	app.router.navigate('/data_fields/'+$(this).data('id'));
 });
 
+$(document).on('click', '.select_data_field', function (e) {
+	var id = $('.edit_field_id').val();
+	var field = $(this).data('id');
+	if(app.data.data_fields_active[id-1].id != field){
+		query('UPDATE data_fields_selected set field = ? where id = ?', [field, id], function(tx,results){
+			get_data_fields_selected(function(){
+				app.router.navigate('/');
+			});
+		});
+	}
+	else{
+		app.router.navigate('/');
+	}
+	
+});

@@ -11,12 +11,15 @@
     </div>
   </div>
   <div class="page-content">
-	<div class="hide">{{js 'field_id = this.$route.params.field_id'}}</div>
+	<div class="hide">
+		{{js 'field_id = this.$root.data_fields_active[this.$route.params.field_id-1].id'}}
+		<input type="hidden" class="edit_field_id" value="{{this.$route.params.field_id}}">
+	</div>
     <div class="block">
 		<div class="list links-list">
 		  <ul>
 			  {{#each $root.data_fields}}
-				<li><a href="#" class="{{js 'return (field_id==this.field) ? \"selected\" : null '}}">{{this.name}}</a></li>
+				<li><a href="#" data-id="{{this.id}}" class="{{js 'return (field_id==this.id) ? \"selected\" : null '}} select_data_field">{{this.name}}</a></li>
 			  {{/each}}
 		  </ul>
 		</div>
